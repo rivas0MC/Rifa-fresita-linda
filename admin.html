@@ -1,34 +1,32 @@
 <!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel de administración</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administración · Rifa Fresita Linda</title>
 <style>
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#fff8fc;color:#38243a}.wrap{width:min(1100px,94%);margin:auto}header{background:linear-gradient(90deg,#db2777,#7c3aed);color:#fff;padding:20px}.card{background:#fff;border-radius:20px;padding:20px;margin:20px 0;box-shadow:0 15px 35px #581c8720}input{width:100%;box-sizing:border-box;padding:12px;margin:6px 0 12px;border:1px solid #ddd;border-radius:11px}.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:850;cursor:pointer}.primary{background:#7c3aed;color:#fff}.sold{background:#16a34a;color:#fff}.release{background:#dc2626;color:#fff}.hidden{display:none}table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}.actions{display:flex;gap:6px;flex-wrap:wrap}.error{color:#b91c1c;font-weight:700}@media(max-width:760px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border:1px solid #ddd;border-radius:12px;padding:8px;margin:10px 0}td{border:0}}
-</style>
-</head>
-<body>
-<header><div class="wrap"><h1>Panel de administración</h1></div></header>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#fff8fc;color:#38243a}.wrap{width:min(1180px,94%);margin:auto}header{background:linear-gradient(90deg,#db2777,#7c3aed);color:#fff;padding:24px 0}
+.card{background:#fff;border-radius:22px;padding:22px;margin:22px 0;box-shadow:0 15px 40px #581c8720}input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin:7px 0 14px;font:inherit;box-sizing:border-box}
+button{border:0;border-radius:12px;padding:11px 15px;font-weight:850;cursor:pointer}.primary{background:#7c3aed;color:#fff}.sold{background:#16a34a;color:#fff}.release{background:#dc2626;color:#fff}.logout{background:#111;color:#fff}.export{background:#0f766e;color:#fff}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}.badge{padding:4px 9px;border-radius:999px;font-weight:800}.reserved{background:#fef3c7}.soldBadge{background:#dcfce7}.hidden{display:none}.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.toolbar{display:grid;grid-template-columns:1fr 220px auto;gap:10px;align-items:end}.statcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:16px;border-radius:16px;background:#faf5ff;font-weight:900;text-align:center}.error{color:#b91c1c;font-weight:800}
+@media(max-width:760px){.toolbar,.statcards{grid-template-columns:1fr}table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border:1px solid #eee;border-radius:14px;margin:12px 0;padding:10px}td{border:0;padding:5px}}
+</style></head><body>
+<header><div class="wrap"><h1>Panel de administración</h1><p>Rifa Fresita Linda</p></div></header>
 <main class="wrap">
-<section id="login" class="card">
-<h2>Iniciar sesión</h2>
-<form id="loginForm">
-<input id="email" type="email" placeholder="Correo" required>
-<input id="password" type="password" placeholder="Contraseña" required>
-<button class="btn primary" type="submit">Entrar</button>
-<p id="loginMsg"></p>
-</form>
-</section>
-<section id="panel" class="hidden">
-<div class="card"><button id="logout" class="btn" type="button">Cerrar sesión</button> <a href="index.html">Volver</a><h2 id="summary">Cargando...</h2></div>
-<div class="card"><div style="overflow:auto"><table><thead><tr><th>Número</th><th>Nombre</th><th>Contacto</th><th>Domicilio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="rows"></tbody></table></div></div>
-</section>
-</main>
+<section id="loginCard" class="card"><h2>Iniciar sesión</h2><form id="loginForm"><label>Correo</label><input id="loginEmail" type="email" required><label>Contraseña</label><input id="loginPassword" type="password" required><button class="primary">Entrar</button><p id="loginMsg"></p></form></section>
+<section id="adminArea" class="hidden">
+<div class="card"><div class="actions"><button id="logoutBtn" class="logout">Cerrar sesión</button><a href="index.html">Volver a la rifa</a></div>
+<div class="statcards"><div class="stat" id="availableStat">0 disponibles</div><div class="stat" id="reservedStat">0 reservados</div><div class="stat" id="soldStat">0 vendidos</div></div></div>
+<div class="card">
+  <div class="toolbar">
+    <div><label>Buscar</label><input id="searchInput" placeholder="Número, nombre, teléfono o correo"></div>
+    <div><label>Estado</label><select id="statusFilter"><option value="all">Todos</option><option value="reserved">Reservados</option><option value="sold">Vendidos</option></select></div>
+    <button id="exportBtn" class="export">Exportar a Excel (CSV)</button>
+  </div>
+</div>
+<div class="card"><h2>Participantes</h2><div style="overflow:auto"><table><thead><tr><th>Número</th><th>Nombre</th><th>Contacto</th><th>Domicilio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</section></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, onSnapshot, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, getDoc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBH-syyf18w7WZjOsOT3um_eYRdCxNJH2Q",
@@ -39,20 +37,21 @@ const firebaseConfig = {
   appId: "1:1006106726360:web:c2387bbc29523e76f7acad",
   measurementId: "G-RB54YTGJJ8"
 };
+
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const loginSection=document.getElementById("login"),panelSection=document.getElementById("panel"),loginForm=document.getElementById("loginForm"),emailInput=document.getElementById("email"),passwordInput=document.getElementById("password"),loginMsg=document.getElementById("loginMsg"),logoutBtn=document.getElementById("logout"),rows=document.getElementById("rows"),summary=document.getElementById("summary");
-let unsub=null;
-
-loginForm.addEventListener("submit",async(e)=>{e.preventDefault();loginMsg.className="";loginMsg.textContent="Iniciando sesión...";try{const cred=await signInWithEmailAndPassword(auth,emailInput.value.trim(),passwordInput.value);const adminSnap=await getDoc(doc(db,"admins",cred.user.uid));if(!adminSnap.exists()){await signOut(auth);loginMsg.className="error";loginMsg.textContent="Este usuario no tiene permisos de administrador.";return}loginMsg.textContent=""}catch(error){console.error(error);loginMsg.className="error";if(["auth/invalid-credential","auth/wrong-password","auth/user-not-found"].includes(error.code))loginMsg.textContent="Correo o contraseña incorrectos.";else if(error.code==="auth/too-many-requests")loginMsg.textContent="Demasiados intentos. Espera unos minutos.";else loginMsg.textContent="Error: "+error.code}});
-logoutBtn.addEventListener("click",()=>signOut(auth));
-
-onAuthStateChanged(auth,async(user)=>{if(user){const adminSnap=await getDoc(doc(db,"admins",user.uid));if(!adminSnap.exists()){await signOut(auth);return}loginSection.classList.add("hidden");panelSection.classList.remove("hidden");escuchar()}else{loginSection.classList.remove("hidden");panelSection.classList.add("hidden");if(unsub){unsub();unsub=null}}});
-
-function escuchar(){if(unsub)unsub();unsub=onSnapshot(collection(db,"registrations"),(snapshot)=>{const datos=[];snapshot.forEach((d)=>datos.push({id:d.id,...d.data()}));datos.sort((a,b)=>a.number-b.number);dibujar(datos)},(error)=>{console.error(error);rows.innerHTML="<tr><td colspan='6'>No tienes permisos para leer los datos.</td></tr>"})}
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function dibujar(lista){rows.innerHTML="";let reservados=0,vendidos=0;lista.forEach(x=>{if(x.status==="reserved")reservados++;if(x.status==="sold")vendidos++;const tr=document.createElement("tr");tr.innerHTML=`<td><b>${x.number}</b></td><td>${esc(x.name)}</td><td>${esc(x.phone)}<br>${esc(x.email)}</td><td>${esc(x.address)}</td><td>${x.status==="sold"?"Vendido":"Reservado"}</td><td><div class="actions"><button class="btn sold" data-s="${x.id}" type="button">Marcar vendido</button><button class="btn release" data-r="${x.id}" type="button">Liberar</button></div></td>`;rows.appendChild(tr)});summary.textContent=`${50-lista.length} disponibles · ${reservados} reservados · ${vendidos} vendidos`;document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>marcarVendido(b.dataset.s));document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>liberarNumero(b.dataset.r))}
-async function marcarVendido(id){if(!confirm("¿Marcar como vendido?"))return;try{const batch=writeBatch(db);batch.update(doc(db,"registrations",id),{status:"sold",updatedAt:serverTimestamp()});batch.update(doc(db,"publicNumbers",id),{status:"sold",updatedAt:serverTimestamp()});await batch.commit()}catch(error){console.error(error);alert("No se pudo marcar como vendido.")}}
-async function liberarNumero(id){if(!confirm("¿Liberar número y borrar los datos?"))return;try{const batch=writeBatch(db);batch.delete(doc(db,"registrations",id));batch.delete(doc(db,"publicNumbers",id));await batch.commit()}catch(error){console.error(error);alert("No se pudo liberar el número.")}}
-</script>
-</body>
-</html>
+const loginCard=document.getElementById("loginCard"),adminArea=document.getElementById("adminArea"),rows=document.getElementById("rows");
+const searchInput=document.getElementById("searchInput"),statusFilter=document.getElementById("statusFilter");
+let unsub=null, allData=[];
+document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();const m=document.getElementById("loginMsg");m.textContent="Iniciando sesión…";m.className="";try{const cred=await signInWithEmailAndPassword(auth,document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value);const a=await getDoc(doc(db,"admins",cred.user.uid));if(!a.exists()){await signOut(auth);m.textContent="Este usuario no tiene permisos de administrador.";m.className="error";return;}m.textContent="";}catch(err){console.error(err);m.textContent=err.code==="auth/invalid-credential"?"Correo o contraseña incorrectos.":"Error: "+err.code;m.className="error";}};
+document.getElementById("logoutBtn").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async user=>{if(user){const a=await getDoc(doc(db,"admins",user.uid));if(!a.exists()){await signOut(auth);return;}loginCard.classList.add("hidden");adminArea.classList.remove("hidden");listen();}else{loginCard.classList.remove("hidden");adminArea.classList.add("hidden");if(unsub){unsub();unsub=null;}}});
+function listen(){unsub=onSnapshot(collection(db,"registrations"),snap=>{allData=[];snap.forEach(d=>allData.push({id:d.id,...d.data()}));allData.sort((a,b)=>a.number-b.number);updateStats();render();},err=>{rows.innerHTML=`<tr><td>No tienes permiso para leer los registros.</td></tr>`;console.error(err);});}
+function updateStats(){const r=allData.filter(x=>x.status==="reserved").length,s=allData.filter(x=>x.status==="sold").length;document.getElementById("availableStat").textContent=`${50-r-s} disponibles`;document.getElementById("reservedStat").textContent=`${r} reservados`;document.getElementById("soldStat").textContent=`${s} vendidos`;}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));}
+function filtered(){const q=searchInput.value.trim().toLowerCase(),f=statusFilter.value;return allData.filter(x=>{const hay=[x.number,x.name,x.phone,x.email,x.address].join(" ").toLowerCase();return (!q||hay.includes(q))&&(f==="all"||x.status===f);});}
+function render(){rows.innerHTML="";filtered().forEach(r=>{const tr=document.createElement("tr");tr.innerHTML=`<td><b>${r.number}</b></td><td>${esc(r.name)}</td><td>${esc(r.phone)}<br>${esc(r.email)}</td><td>${esc(r.address)}</td><td><span class="badge ${r.status==="sold"?"soldBadge":"reserved"}">${r.status==="sold"?"Vendido":"Reservado"}</span></td><td><div class="actions"><button class="sold" data-sold="${r.id}">Marcar vendido</button><button class="release" data-release="${r.id}">Liberar</button></div></td>`;rows.appendChild(tr);});document.querySelectorAll("[data-sold]").forEach(b=>b.onclick=()=>markSold(b.dataset.sold));document.querySelectorAll("[data-release]").forEach(b=>b.onclick=()=>release(b.dataset.release));}
+searchInput.oninput=render;statusFilter.onchange=render;
+async function markSold(id){if(!confirm("¿Confirmar como vendido?"))return;const batch=writeBatch(db);batch.update(doc(db,"registrations",id),{status:"sold",updatedAt:serverTimestamp()});batch.update(doc(db,"publicNumbers",id),{status:"sold",updatedAt:serverTimestamp()});await batch.commit();}
+async function release(id){if(!confirm("¿Liberar este número y borrar los datos del registro?"))return;const batch=writeBatch(db);batch.delete(doc(db,"registrations",id));batch.delete(doc(db,"publicNumbers",id));await batch.commit();}
+document.getElementById("exportBtn").onclick=()=>{const headers=["Numero","Nombre","Telefono","Correo","Domicilio","Estado"];const lines=[headers,...filtered().map(x=>[x.number,x.name,x.phone,x.email,x.address,x.status==="sold"?"Vendido":"Reservado"])].map(row=>row.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(","));const blob=new Blob(["\ufeff"+lines.join("\n")],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="participantes-rifa.csv";a.click();URL.revokeObjectURL(a.href);};
+</script></body></html>

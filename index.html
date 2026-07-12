@@ -1,16 +1,168 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rifa Fresita Linda</title><style>
-:root{--p:#db2777;--v:#7c3aed;--g:#16a34a;--y:#eab308;--r:#dc2626}*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#fff8fc;color:#38243a}.wrap{width:min(1050px,92%);margin:auto}.top{background:linear-gradient(90deg,var(--p),var(--v));color:#fff;text-align:center;padding:10px;font-weight:900}header{text-align:center;padding:36px 0 16px}h1{font-size:clamp(2rem,6vw,4rem);margin:10px;background:linear-gradient(90deg,var(--p),var(--v));-webkit-background-clip:text;color:transparent}.card{background:#fff;border-radius:24px;padding:22px;margin:20px 0;box-shadow:0 15px 40px #581c8720}.hero{display:grid;grid-template-columns:1fr 1fr;gap:20px}.visual{display:grid;place-items:center;min-height:300px;font-size:7rem;background:linear-gradient(145deg,#fff,#fdf2f8)}.price{display:inline-block;background:linear-gradient(90deg,var(--p),var(--v));color:#fff;padding:9px 15px;border-radius:14px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:9px}.num{aspect-ratio:1;border:0;border-radius:12px;background:var(--g);color:#fff;font-weight:900;cursor:pointer}.num.reserved{background:var(--y);color:#332900;cursor:not-allowed}.num.sold{background:var(--r);cursor:not-allowed;text-decoration:line-through}.legend{display:flex;gap:14px;flex-wrap:wrap;font-weight:800}.dot{display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:5px}.bank{background:#122a61;color:#fff;border-radius:20px;padding:20px}.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-block}.wa{background:#25d366;color:#073b1c}.dark{background:#111;color:#fff}.copy{background:#fff;color:#122a61}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}dialog{border:0;border-radius:22px;padding:0;width:min(550px,92%)}dialog::backdrop{background:#0008}.modal{padding:22px}label{display:block;font-weight:800;margin:12px 0 5px}input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:11px;font:inherit}textarea{min-height:80px}.msg{font-weight:800;margin-top:10px}.small{font-size:.88rem;color:#74516f}footer{text-align:center;padding:25px}@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(5,1fr)}}
-</style></head><body><div class="top">🎟️ 50 números · $45 MXN · Un ganador</div><header class="wrap"><h1>Rifa de mochila con útiles escolares</h1><p>Elige un número, registra tus datos y realiza la transferencia.</p></header><main class="wrap">
-<section class="hero"><div class="card visual">🎒</div><div class="card"><h2>Premio</h2><div class="price">$45 por número</div><ul><li>1 mochila</li><li>4 libretas de 100 hojas</li><li>2 libretas de 200 hojas</li><li>2 cajas de colores</li><li>1 caja de crayolas</li><li>1 mandil para preescolar</li></ul><p><b>La fecha se publicará en TikTok.</b></p><div class="actions"><a class="btn dark" href="https://www.tiktok.com/@fresita.linda390" target="_blank">TikTok</a><a class="btn wa" href="https://wa.me/523141019516" target="_blank">WhatsApp</a></div></div></section>
-<section class="card"><h2>Elige tu número</h2><div class="legend"><span><i class="dot" style="background:#16a34a"></i>Disponible</span><span><i class="dot" style="background:#eab308"></i>Reservado</span><span><i class="dot" style="background:#dc2626"></i>Vendido</span></div><p id="stats"><b>Cargando…</b></p><div id="grid" class="grid"></div><p class="small">El número queda reservado hasta que la administradora confirme el pago o lo libere.</p></section>
-<section class="card"><div class="bank"><h2>Datos para transferencia</h2><p><b>Banco:</b> Mercado Pago</p><p><b>Titular:</b> Inés Eunice de la Paz Gutiérrez</p><p><b>CLABE:</b> 722969010877532084</p><p><b>Concepto:</b> Rifa</p><button id="copy" class="btn copy">Copiar CLABE</button></div></section></main>
-<dialog id="dlg"><form id="form" class="modal"><h2>Reservar número <span id="chosen"></span></h2><label>Nombre completo *</label><input id="name" required maxlength="100"><label>Teléfono *</label><input id="phone" required maxlength="20"><label>Correo *</label><input id="email" type="email" required maxlength="120"><label>Domicilio *</label><textarea id="address" required maxlength="250"></textarea><label style="font-weight:600"><input id="privacy" type="checkbox" required style="width:auto"> Acepto el uso de mis datos solo para administrar esta rifa.</label><div id="message" class="msg"></div><div class="actions"><button type="button" id="cancel" class="btn">Cancelar</button><button id="submit" class="btn wa">Reservar y continuar</button></div></form></dialog>
-<footer><a href="admin.html">Acceso administrador</a></footer>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#db2777">
+  <title>Rifa Fresita Linda</title>
+  <style>
+    :root{--pink:#db2777;--purple:#7c3aed;--green:#16a34a;--yellow:#eab308;--red:#dc2626;--navy:#10265c;--bg:#fff8fc;--text:#38243a}
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at 8% 0,#fce7f3,transparent 32%),radial-gradient(circle at 92% 5%,#ede9fe,transparent 32%),var(--bg);color:var(--text)}
+    .wrap{width:min(1100px,92%);margin:auto} .top{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;text-align:center;padding:10px;font-weight:900}
+    header{text-align:center;padding:42px 0 18px} .brand{display:inline-block;background:#fff;padding:8px 16px;border-radius:999px;box-shadow:0 12px 35px #7c3aed22;font-weight:900}
+    h1{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1;margin:16px 0;background:linear-gradient(90deg,var(--pink),var(--purple));-webkit-background-clip:text;color:transparent}
+    .card{background:#fffc;border-radius:26px;padding:24px;box-shadow:0 18px 45px #581c8722;margin:22px 0}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center} .visual{min-height:330px;display:grid;place-items:center;font-size:7rem;background:linear-gradient(145deg,#fff,#fdf2f8)} .visual small{display:block;font-size:2rem}
+    .image-card{position:relative;overflow:hidden;padding:0;background:#fff}
+    .prize-image{display:block;width:100%;height:100%;min-height:330px;object-fit:cover}
+    .image-badge{position:absolute;left:16px;bottom:16px;background:rgba(17,17,17,.82);color:#fff;padding:9px 13px;border-radius:999px;font-weight:900;backdrop-filter:blur(6px)}
+    .price{display:inline-block;background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;padding:9px 16px;border-radius:14px;font-size:1.35rem;font-weight:950}
+    .btn{border:0;border-radius:14px;padding:12px 16px;min-height:48px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+    .wa{background:#25d366;color:#073b1c} .dark{background:#111;color:#fff} .copy{background:#fff;color:var(--navy)} .muted{background:#eee;color:#333}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px} .legend{display:flex;flex-wrap:wrap;gap:14px;font-weight:850;margin:12px 0 18px} .dot{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:5px}
+    .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:10px} .num{aspect-ratio:1;border:0;border-radius:13px;color:#fff;font-weight:950;font-size:1rem;cursor:pointer;background:var(--green)}
+    .num.reserved{background:var(--yellow);color:#3b2f00;cursor:not-allowed} .num.sold{background:var(--red);cursor:not-allowed;text-decoration:line-through} .stats{font-weight:900;margin-bottom:14px}
+    .progress{height:16px;border-radius:999px;background:#f3e8ff;overflow:hidden;margin:10px 0 18px} .bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--purple));transition:.3s}
+    .bank{background:linear-gradient(145deg,#0f2558,#183474);color:#fff;border-radius:22px;padding:22px} .bank p{margin:8px 0} .clabe{font-size:1.25rem;font-weight:950;word-break:break-all}
+    dialog{border:0;border-radius:24px;padding:0;width:min(560px,92%);box-shadow:0 25px 70px #0004} dialog::backdrop{background:#0008} .modal{padding:24px}
+    label{display:block;font-weight:800;margin:13px 0 5px} input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;font:inherit} textarea{min-height:85px;resize:vertical}
+    .small{font-size:.88rem;color:#74516f} .error{color:#b91c1c;font-weight:800} .success{color:#166534;font-weight:800}
+    .qr-share{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:center}
+    .qr-wrap{text-align:center}.qr-wrap img{width:min(250px,100%);background:#fff;padding:10px;border-radius:18px;box-shadow:0 12px 30px #0002}
+    footer{text-align:center;padding:28px 0 45px;color:#74516f}
+    @media(max-width:760px){.hero,.qr-share{grid-template-columns:1fr}.grid{grid-template-columns:repeat(5,1fr)}.card{padding:18px}.image-card{padding:0}}
+  </style>
+</head>
+<body>
+<div class="top">🎟️ 50 números · $45 MXN · Un solo ganador</div>
+<header class="wrap">
+  <div class="brand">🍓 Fresita Linda</div>
+  <h1>Rifa de mochila con útiles escolares</h1>
+  <p>Selecciona un número disponible, registra tus datos y realiza la transferencia.</p>
+</header>
+
+<main class="wrap">
+<section class="hero">
+  <div class="card visual image-card">
+      <img src="premio.jpg" alt="Promoción de la rifa de mochila con útiles escolares" class="prize-image">
+      <div class="image-badge">🎒 Premio de la rifa</div>
+    </div>
+  <div class="card">
+    <h2>Premio</h2><div class="price">$45 MXN por número</div>
+    <ul><li>1 mochila</li><li>4 libretas profesionales de 100 hojas</li><li>2 libretas profesionales de 200 hojas</li><li>2 cajas de colores</li><li>1 caja de crayolas</li><li>1 mandil para preescolar</li></ul>
+    <p><b>La fecha del sorteo se publicará en TikTok.</b></p>
+    <div class="actions"><a class="btn dark" href="https://www.tiktok.com/@fresita.linda390" target="_blank" rel="noopener">♪ TikTok</a><a class="btn wa" href="https://wa.me/523141019516" target="_blank" rel="noopener">📱 WhatsApp</a></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Elige tu número</h2>
+  <div class="legend"><span><i class="dot" style="background:#16a34a"></i>Disponible</span><span><i class="dot" style="background:#eab308"></i>Reservado</span><span><i class="dot" style="background:#dc2626"></i>Vendido</span></div>
+  <div id="stats" class="stats">Cargando números…</div>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <div id="grid" class="grid"></div>
+  <p class="small">Los números reservados permanecen apartados hasta que la administradora confirme el pago o los libere.</p>
+</section>
+
+<section class="card">
+  <div class="bank">
+    <h2>💳 Datos para transferencia</h2>
+    <p><b>Banco:</b> Mercado Pago</p>
+    <p><b>Titular:</b> Inés Eunice de la Paz Gutiérrez</p>
+    <p><b>CLABE:</b> <span class="clabe">722969010877532084</span></p>
+    <p><b>Concepto:</b> Rifa</p>
+    <p><b>Importe:</b> $45 MXN por número</p>
+    <div class="actions"><button class="btn copy" id="copyClabe">📋 Copiar CLABE</button></div>
+  </div>
+</section>
+
+<section class="card qr-share">
+  <div>
+    <h2>📲 Comparte la rifa</h2>
+    <p>Escanea este código para abrir la página desde cualquier celular.</p>
+    <div class="actions">
+      <button class="btn dark" id="shareBtn" type="button">Compartir enlace</button>
+      <button class="btn muted" id="copyLinkBtn" type="button">Copiar enlace</button>
+    </div>
+  </div>
+  <div class="qr-wrap">
+    <img src="qr-rifa.png" alt="Código QR para abrir la página de la rifa">
+  </div>
+</section>
+
+</main>
+
+<dialog id="formDialog">
+<form id="reservationForm" class="modal">
+  <h2>Reservar número <span id="chosenNumber"></span></h2>
+  <p class="small">El número quedará reservado hasta que se confirme o se libere.</p>
+  <label>Nombre completo *</label><input id="name" required maxlength="100" autocomplete="name">
+  <label>Teléfono *</label><input id="phone" required maxlength="20" inputmode="tel" autocomplete="tel">
+  <label>Correo electrónico *</label><input id="email" required maxlength="120" type="email" autocomplete="email">
+  <label>Domicilio *</label><textarea id="address" required maxlength="250" autocomplete="street-address"></textarea>
+  <label style="font-weight:600"><input id="privacy" type="checkbox" required style="width:auto"> Acepto que mis datos se usen únicamente para administrar esta rifa y contactar sobre mi participación.</label>
+  <div id="formMessage"></div>
+  <div class="actions"><button type="button" class="btn muted" id="cancelBtn">Cancelar</button><button type="submit" class="btn wa" id="reserveBtn">Reservar y continuar</button></div>
+</form>
+</dialog>
+
+<footer class="wrap">Organiza <b>Fresita Linda</b> · <a href="admin.html">Acceso administrador</a></footer>
+
 <script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';import{getFirestore,collection,onSnapshot,doc,writeBatch,serverTimestamp}from'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
-const firebaseConfig={apiKey:'AIzaSyBH-syyf18w7W7iQsOT3um_eYRdCxNJH20',authDomain:'rifa-fresita-linda.firebaseapp.com',projectId:'rifa-fresita-linda',storageBucket:'rifa-fresita-linda.firebasestorage.app',messagingSenderId:'1006106726360',appId:'1:1006106726360:web:c2387bbc29523e76f7acad'};
-const db=getFirestore(initializeApp(firebaseConfig)),grid=document.querySelector('#grid'),stats=document.querySelector('#stats'),dlg=document.querySelector('#dlg'),form=document.querySelector('#form');let chosen=null,states={};
-function render(){grid.innerHTML='';let res=0,sold=0;for(let n=1;n<=50;n++){let s=states[n]?.status||'available';if(s==='reserved')res++;if(s==='sold')sold++;let b=document.createElement('button');b.className='num '+(s==='available'?'':s);b.textContent=n;b.disabled=s!=='available';if(!b.disabled)b.onclick=()=>{chosen=n;document.querySelector('#chosen').textContent=n;document.querySelector('#message').textContent='';dlg.showModal()};grid.appendChild(b)}stats.innerHTML=`<b>${50-res-sold} disponibles · ${res} reservados · ${sold} vendidos</b>`}
-onSnapshot(collection(db,'publicNumbers'),s=>{states={};s.forEach(d=>states[d.id]=d.data());render()});document.querySelector('#cancel').onclick=()=>dlg.close();document.querySelector('#copy').onclick=async()=>{await navigator.clipboard.writeText('722969010877532084');alert('CLABE copiada')};
-form.onsubmit=async e=>{e.preventDefault();let btn=document.querySelector('#submit'),msg=document.querySelector('#message');btn.disabled=true;msg.textContent='Guardando…';let id=String(chosen),data={number:chosen,name:name.value.trim(),phone:phone.value.trim(),email:email.value.trim(),address:address.value.trim(),status:'reserved',createdAt:serverTimestamp()};try{let batch=writeBatch(db);batch.set(doc(db,'publicNumbers',id),{number:chosen,status:'reserved',updatedAt:serverTimestamp()});batch.set(doc(db,'registrations',id),data);await batch.commit();msg.style.color='green';msg.textContent='Número reservado. Envía tu comprobante por WhatsApp.';let text=encodeURIComponent(`Hola, reservé el número ${chosen}. Mi nombre es ${data.name}. Enviaré mi comprobante.`);setTimeout(()=>{window.open(`https://wa.me/523141019516?text=${text}`,'_blank');dlg.close();form.reset()},800)}catch(err){msg.style.color='red';msg.textContent='Ese número ya fue reservado o no se pudo guardar. Elige otro.'}finally{btn.disabled=false}};
-</script></body></html>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBH-syyf18w7WZjOsOT3um_eYRdCxNJH2Q",
+  authDomain: "rifa-fresita-linda.firebaseapp.com",
+  projectId: "rifa-fresita-linda",
+  storageBucket: "rifa-fresita-linda.firebasestorage.app",
+  messagingSenderId: "1006106726360",
+  appId: "1:1006106726360:web:c2387bbc29523e76f7acad",
+  measurementId: "G-RB54YTGJJ8"
+};
+
+const app=initializeApp(firebaseConfig), db=getFirestore(app);
+const grid=document.getElementById("grid"), stats=document.getElementById("stats"), bar=document.getElementById("bar"), dialog=document.getElementById("formDialog"), form=document.getElementById("reservationForm");
+let selected=null, states={};
+function draw(){
+  grid.innerHTML=""; let reserved=0,sold=0;
+  for(let n=1;n<=50;n++){const s=states[String(n)]?.status||"available"; if(s==="reserved")reserved++; if(s==="sold")sold++;
+    const b=document.createElement("button"); b.type="button"; b.className="num "+(s==="available"?"":s); b.textContent=n; b.disabled=s!=="available";
+    if(s==="available") b.onclick=()=>{selected=n; document.getElementById("chosenNumber").textContent=n; document.getElementById("formMessage").textContent=""; dialog.showModal();};
+    grid.appendChild(b);
+  }
+  stats.textContent=`${50-reserved-sold} disponibles · ${reserved} reservados · ${sold} vendidos`;
+  bar.style.width=`${((reserved+sold)/50)*100}%`;
+}
+onSnapshot(collection(db,"publicNumbers"), snap=>{states={}; snap.forEach(d=>states[d.id]=d.data()); draw();}, e=>{stats.textContent="No fue posible cargar los números."; console.error(e);});
+document.getElementById("cancelBtn").onclick=()=>dialog.close();
+document.getElementById("copyClabe").onclick=async()=>{await navigator.clipboard.writeText("722969010877532084"); alert("CLABE copiada");};
+document.getElementById("copyLinkBtn").onclick=async()=>{
+  await navigator.clipboard.writeText("https://rivas0mc.github.io/Rifa-fresita-linda/");
+  alert("Enlace copiado");
+};
+document.getElementById("shareBtn").onclick=async()=>{
+  const data={title:"Rifa Fresita Linda",text:"Participa en la rifa de una mochila con útiles escolares.",url:"https://rivas0mc.github.io/Rifa-fresita-linda/"};
+  if(navigator.share){await navigator.share(data);}else{await navigator.clipboard.writeText(data.url);alert("Enlace copiado");}
+};
+form.addEventListener("submit",async e=>{
+  e.preventDefault(); if(!selected)return;
+  const btn=document.getElementById("reserveBtn"), msg=document.getElementById("formMessage"); btn.disabled=true; msg.className=""; msg.textContent="Guardando…";
+  const numberId=String(selected), publicRef=doc(db,"publicNumbers",numberId), regRef=doc(db,"registrations",numberId);
+  const data={number:selected,name:document.getElementById("name").value.trim(),phone:document.getElementById("phone").value.trim(),email:document.getElementById("email").value.trim(),address:document.getElementById("address").value.trim(),status:"reserved",createdAt:serverTimestamp()};
+  try{
+    const batch=writeBatch(db);
+    batch.set(publicRef,{number:selected,status:"reserved",updatedAt:serverTimestamp()});
+    batch.set(regRef,data);
+    await batch.commit();
+    msg.className="success"; msg.textContent="Número reservado. Ahora realiza la transferencia y envía tu comprobante.";
+    const text=encodeURIComponent(`Hola, reservé el número ${selected} en la rifa. Mi nombre es ${data.name}. Ya realizaré la transferencia y adjuntaré mi comprobante.`);
+    setTimeout(()=>{window.open(`https://wa.me/523141019516?text=${text}`,"_blank"); dialog.close(); form.reset(); selected=null;},900);
+  }catch(err){
+    console.error(err); msg.className="error"; msg.textContent=err.code==="permission-denied"?"Ese número ya fue reservado. Elige otro.":"No se pudo reservar. Intenta nuevamente.";
+  }finally{btn.disabled=false;}
+});
+</script>
+</body></html>
