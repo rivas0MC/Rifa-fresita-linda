@@ -30,7 +30,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, onSnapshot, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const firebaseConfig={apiKey:"AIzaSyBH-syyf18w7W7iQsOT3um_eYRdCxNJH20",authDomain:"rifa-fresita-linda.firebaseapp.com",projectId:"rifa-fresita-linda",storageBucket:"rifa-fresita-linda.firebasestorage.app",messagingSenderId:"1006106726360",appId:"1:1006106726360:web:c2387bbc29523e76f7acad"};
+const firebaseConfig = {
+  apiKey: "AIzaSyBH-syyf18w7WZjOsOT3um_eYRdCxNJH2Q",
+  authDomain: "rifa-fresita-linda.firebaseapp.com",
+  projectId: "rifa-fresita-linda",
+  storageBucket: "rifa-fresita-linda.firebasestorage.app",
+  messagingSenderId: "1006106726360",
+  appId: "1:1006106726360:web:c2387bbc29523e76f7acad",
+  measurementId: "G-RB54YTGJJ8"
+};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const loginSection=document.getElementById("login"),panelSection=document.getElementById("panel"),loginForm=document.getElementById("loginForm"),emailInput=document.getElementById("email"),passwordInput=document.getElementById("password"),loginMsg=document.getElementById("loginMsg"),logoutBtn=document.getElementById("logout"),rows=document.getElementById("rows"),summary=document.getElementById("summary");
 let unsub=null;
